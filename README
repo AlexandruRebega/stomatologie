@@ -1,0 +1,9 @@
+RULARE:
+docker-compose build --no-cache
+docker-compose run
+
+STERGERE IMAGINI:
+docker-compose stop
+
+CONECTARE MYSQL:
+mysql -P 32000 -u root -p
