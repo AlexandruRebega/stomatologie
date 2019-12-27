@@ -1,9 +1,11 @@
 RULARE:
 docker-compose build --no-cache
 docker-compose run
+docker run mysql -P 3306
 
 STERGERE IMAGINI:
-docker-compose stop
+docker-compose down
+docker system prune -a
 
 CONECTARE MYSQL:
-mysql -P 32000 -u root -p
+mysql -P 32000 -u root -p dent
