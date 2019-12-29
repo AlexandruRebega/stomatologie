@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Input In Container Fixed To Bottom Of Viewport | datetimepicker Tests</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" type="text/css" href="static/jquery.datetimepicker.css"/>
+
+    <link rel="stylesheet" href="static/fonts/icomoon/style.css">
+
+
+    <link rel="stylesheet" href="static/css/styleIndex.css">
+
+    </head>
+
+    <body>
+    <main>
+        <h1>Input In Container Fixed To Bottom Of Viewport</h1>
+
+    <div class="site-section" id="team-section">
+      <div class="container">
+        <div class="row mb-5">
+          <div class="col-12">
+            <div class="block-heading-1">
+              <span>Quick and easy!</span>
+              <h2>Make your appointment right now!</h2>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-lg-4 col-md-6 mb-4 mb-lg-0" data-aos="fade-up">
+            <div class="block-team-member-1 text-center rounded">
+              <figure>
+                <img src="static/images/doc_person_1.jpg" alt="Image" class="img-fluid rounded-circle">
+              </figure>
+              <h3 class="font-size-20 text-black">Bob Carry</h3>
+              <span class="d-block font-gray-5 letter-spacing-1 text-uppercase font-size-12 mb-3">Doctor</span>
+            <div id="filters">
+                <form method="post" action="?">
+                    <div>
+                        <label for="filter-date">Date</label>
+                        <input type="text" name="filter-date" id="filter-date"/>
+                    </div>
+                </form>
+            </div>
+
+            </div>
+          </div>
+
+          <div class="col-lg-4 col-md-6 mb-4 mb-lg-0" data-aos="fade-up" data-aos-delay="100">
+            <div class="block-team-member-1 text-center rounded">
+              <figure>
+                <img src="static/images/doc_person_2.jpg" alt="Image" class="img-fluid rounded-circle">
+              </figure>
+              <h3 class="font-size-20 text-black">Jean Smith</h3>
+              <span class="d-block font-gray-5 letter-spacing-1 text-uppercase font-size-12 mb-3">Doctor</span>
+            <div id="filters">
+                <form method="post" action="?">
+                    <div>
+                        <label for="filter-date">Date</label>
+                        <input type="text" name="filter-date" id="filter-date"/>
+                    </div>
+                </form>
+            </div>
+
+
+
+            </div>
+          </div>
+
+          <div class="col-lg-4 col-md-6 mb-4 mb-lg-0" data-aos="fade-up" data-aos-delay="200">
+            <div class="block-team-member-1 text-center rounded">
+              <figure>
+                <img src="static/images/doc_person_3.jpg" alt="Image" class="img-fluid rounded-circle">
+              </figure>
+              <h3 class="font-size-20 text-black">Ricky Fisher</h3>
+              <span class="d-block font-gray-5 letter-spacing-1 text-uppercase font-size-12 mb-3">Dentist</span>
+            <div id="filters">
+                <form method="post" action="?">
+                    <div>
+                        <label for="filter-date">Date</label>
+                        <input type="text" name="filter-date" id="filter-date"/>
+                    </div>
+                </form>
+            </div>
+
+
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    </main>
+
+    <script src="static/jquery.js"></script>
+    <script src="static/build/jquery.datetimepicker.full.js"></script>
+
+    <script>
+        /*jslint browser:true*/
+        /*global jQuery, document*/
+
+        jQuery(document).ready(function () {
+            'use strict';
+
+            jQuery('#filter-date, #search-from-date, #search-to-date').datetimepicker();
+        });
+    </script>
+    </body>
+</html>     
+

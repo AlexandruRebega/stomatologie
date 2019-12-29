@@ -47,12 +47,10 @@ def loginHandler():
 
     return render_template('login.html')
 
-@app.route('/print')
-def printMsg():
-    # app.logger.warning('testing warning log')
-    # app.logger.error('testing error log')
-    # app.logger.info('testing info log')
-    return "Check your console"
+@app.route('/appointment')
+def appointmentHandler():
+
+    return render_template('calendar.html')
 
 @app.route('/signup', methods=['GET', 'POST'])
 def signupHandler(): 
