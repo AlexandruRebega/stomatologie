@@ -2,7 +2,7 @@ create database dent;
 use dent;
 
 -- this setting avoids ERROR 1418 (HY000) at slotIsAvailable function
-log_bin_trust_function_creators = 1;
+SET GLOBAL log_bin_trust_function_creators = 1;
 
 create table clienti(
    client_id        INT NOT NULL AUTO_INCREMENT,
@@ -70,6 +70,8 @@ CREATE TABLE programari (
 );
 
 
+INSERT INTO clienti VALUES (NULL, 'test client', 'testClient@gmail.com', 'parola', '0722110234');
+
 -- create table orar(
 --  orar_id     INT NOT NULL AUTO_INCREMENT,
 --  medic_id    INT,
@@ -84,7 +86,6 @@ CREATE TABLE programari (
 CREATE TABLE Numbers (number INT UNSIGNED PRIMARY KEY);
 
 DELIMITER //
-
 CREATE PROCEDURE populateNumbers()
 BEGIN
     SET @x = 0;
@@ -94,17 +95,13 @@ BEGIN
     END WHILE;
     SET @x = NULL;
 END; //
-
 DELIMITER ;
 
 CALL populateNumbers;
 DROP PROCEDURE populateNumbers;
 
 
-
-
 DELIMITER //
-
 CREATE FUNCTION slotIsAvailable(
     medic_id            INT,
     slotStartDateTime   DATETIME,
@@ -123,14 +120,12 @@ BEGIN
     ) THEN FALSE ELSE TRUE
     END;
 END; //
-
 DELIMITER ;
 
 
 
 
 DELIMITER //
-
 CREATE TRIGGER ensureNewAppointmentsDoNotClash
     BEFORE INSERT ON programari
     FOR EACH ROW
@@ -143,7 +138,28 @@ BEGIN
         SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Appointment clashes with an existing appointment!';
     END IF;
 END; //
-
 DELIMITER ;
 
+
+DELIMITER // 
+CREATE PROCEDURE getClientPass(
+    client_email            VARCHAR(40)
+    )
+BEGIN 
+    SELECT client_pass FROM clienti AS c WHERE c.client_email = client_email;
+END; //
+DELIMITER ;
+
+
+DELIMITER //
+CREATE PROCEDURE insertNewClient(
+   client_nume      VARCHAR(56),
+   client_email     VARCHAR(40),
+   client_pass      CHAR(64),
+   client_tel       VARCHAR(15)
+)
+BEGIN
+INSERT INTO clienti VALUES (NULL, client_nume, client_email, client_pass, client_tel);
+END
+DELIMITER ;
 
