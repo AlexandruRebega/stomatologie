@@ -45,8 +45,10 @@ create table istoric(
     PRIMARY KEY ( istoric_id )
 );
 
+-- TODO: add operatie_id, make medic_id, client_id and operatie_id FOREIGN KEYs
 CREATE TABLE programari (
     medic_id    INT UNSIGNED    NOT NULL,
+    client_id   INT UNSIGNED    NOT NULL,       
     data        DATE            NOT NULL,
     startTime   TIME(0)         NOT NULL,
     endTime     TIME(0)         NOT NULL,
@@ -99,6 +101,22 @@ INSERT INTO medici VALUES(NULL,
                         '6000'
                         );
 
+
+INSERT INTO operatie VALUES(NULL, 'Tooth Extraction', '220.0', '1');    -- 1
+INSERT INTO operatie VALUES(NULL, 'Tooth Fillings', '180.50', '1');     -- 2
+INSERT INTO operatie VALUES(NULL, 'Braces Install', '210.20', '1');     -- 3
+INSERT INTO operatie VALUES(NULL, 'Tooth Cleaning', '75.50', '1');      -- 4
+INSERT INTO operatie VALUES(NULL, 'Veneers', '120.00', '1');            -- 5
+INSERT INTO operatie VALUES(NULL, 'Root Canals', '200.00', '1');        -- 6
+INSERT INTO operatie VALUES(NULL, 'Teeth Whitening', '90.50', '1');     -- 7
+INSERT INTO operatie VALUES(NULL, 'Dentures', '230.00', '1');           -- 8
+INSERT INTO operatie VALUES(NULL, 'Crown', '210.00', '1');              -- 9 
+INSERT INTO operatie VALUES(NULL, 'Cap', '195.50', '1');                -- 10
+INSERT INTO operatie VALUES(NULL, 'Gum Surgery', '260.00', '1');        -- 11
+INSERT INTO operatie VALUES(NULL, 'Dental Radiology', '125.00', '1');   -- 12
+INSERT INTO operatie VALUES(NULL, 'Pediatric Dentistry', '75.00', '1'); -- 13
+
+
 CREATE TABLE Numbers (number INT UNSIGNED PRIMARY KEY);
 
 DELIMITER //
@@ -139,8 +157,6 @@ END; //
 DELIMITER ;
 
 
-
-
 DELIMITER //
 CREATE TRIGGER ensureNewAppointmentsDoNotClash
     BEFORE INSERT ON programari
@@ -176,6 +192,36 @@ CREATE PROCEDURE insertNewClient(
 )
 BEGIN
 INSERT INTO clienti VALUES (NULL, client_nume, client_email, client_pass, client_tel);
-END
+END; //
 DELIMITER ;
 
+
+DELIMITER // 
+CREATE PROCEDURE getClientId(
+    client_email            VARCHAR(40)
+    )
+BEGIN 
+    SELECT client_id FROM clienti AS c WHERE c.client_email = client_email;
+END; //
+DELIMITER ;
+
+
+DELIMITER // 
+CREATE PROCEDURE getMedicId(
+    medic_email            VARCHAR(40)
+    )
+BEGIN 
+    SELECT medic_id FROM medici AS m WHERE m.medic_id = medic_email;
+END; //
+DELIMITER ;
+
+
+-- DELIMITER // 
+-- CREATE PROCEDURE insertNewAppointment(
+--     medic_email            VARCHAR(40)
+--     )
+-- BEGIN 
+--     SELECT medic_id FROM medici AS m WHERE m.medic_id = medic_email;
+-- END; //
+-- DELIMITER ;
+-- INSERT INTO programari VALUES ('1', '2',  '20190420', '09:00:00', '09:10:00');

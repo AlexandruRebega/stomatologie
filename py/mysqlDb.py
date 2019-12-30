@@ -2,10 +2,10 @@ import mysql.connector
 from mysql.connector import Error
 
 mydb = mysql.connector.connect(
-  host="localhost",
+  host="db",
   user="root",
   passwd="root",
-  port="32000",
+  port="3306",
   database="dent"
 )
 
@@ -76,7 +76,7 @@ def dbGetClientId(email):
         cursor = mydb.cursor()
 
         if __db_debug__ :
-            print("Get password from DB for :" + email)
+            print("Get client ID from DB for :" + email)
 
         args = [email]
         cursor.callproc('getClientId', args)
@@ -95,3 +95,28 @@ def dbGetClientId(email):
         cursor.close()
 
     return 0 
+
+def dbGetMedicId(email):
+    try:
+        cursor = mydb.cursor()
+
+        if __db_debug__ :
+            print("Get medic ID from DB for :" + email)
+
+        args = [email]
+        cursor.callproc('getMedicId', args)
+
+        # print out the result
+        for result in cursor.stored_results():
+            res = result.fetchall()
+            if not res:
+                return 0
+            return res[0][0]
+
+    except Error as e:
+        print(e)
+
+    finally:
+        cursor.close()
+
+    return 0
