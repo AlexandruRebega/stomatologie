@@ -69,3 +69,29 @@ def dbInsertNewClient(name, email, passwd, phone):
         print("Insert new client successfully!")
 
     return True
+
+
+def dbGetClientId(email):
+    try:
+        cursor = mydb.cursor()
+
+        if __db_debug__ :
+            print("Get password from DB for :" + email)
+
+        args = [email]
+        cursor.callproc('getClientId', args)
+
+        # print out the result
+        for result in cursor.stored_results():
+            res = result.fetchall()
+            if not res:
+                return 0
+            return res[0][0]
+
+    except Error as e:
+        print(e)
+
+    finally:
+        cursor.close()
+
+    return 0 

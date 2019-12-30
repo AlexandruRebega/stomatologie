@@ -16,6 +16,9 @@ create table clienti(
 create table medici(
     medic_id            INT NOT NULL AUTO_INCREMENT,
     medic_nume          VARCHAR(56) NOT NULL,
+    medic_email         VARCHAR(40) NOT NULL,
+    medic_pass          CHAR(64) NOT NULL,
+    medic_tel           VARCHAR(15),
     medic_dataAngajare  Date,
     medic_salariu       INT,
     PRIMARY KEY ( medic_id )    
@@ -69,19 +72,32 @@ CREATE TABLE programari (
     )
 );
 
-
+-- Insert initial data for tests
 INSERT INTO clienti VALUES (NULL, 'test client', 'testClient@gmail.com', 'parola', '0722110234');
-
--- create table orar(
---  orar_id     INT NOT NULL AUTO_INCREMENT,
---  medic_id    INT,
---  FOREIGN KEY (medic_id)
---         REFERENCES medici(medic_id)
---         ON DELETE CASCADE,
---     orar_zi      Date,
-
---  PRIMARY KEY ( orar_id )
--- );
+INSERT INTO medici VALUES(NULL, 
+                        'Bob Carry',
+                        'bobcarry@antodent.com',
+                        'parolaBob',
+                        '0721353123',
+                        '20170420',
+                        '4500'
+                        );
+INSERT INTO medici VALUES(NULL, 
+                        'Jean Smith',
+                        'jsmith@antodent.com',
+                        'parolaJean',
+                        '0744053123',
+                        '20150614',
+                        '4500'
+                        );
+INSERT INTO medici VALUES(NULL, 
+                        'Ricky Fisher',
+                        'rfisher@antodent.com',
+                        'parolaRick',
+                        '0731203102',
+                        '20141113',
+                        '6000'
+                        );
 
 CREATE TABLE Numbers (number INT UNSIGNED PRIMARY KEY);
 

@@ -12,3 +12,4 @@ def crCheckPassLen(passwd):
 
 def crCheckEmailLen(mail):
     return ((len(mail) >= 5) and (len(mail) <= 40))
+    

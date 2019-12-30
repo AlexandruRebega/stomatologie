@@ -1,22 +1,28 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Input In Container Fixed To Bottom Of Viewport | datetimepicker Tests</title>
+        <title>AntoDent</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" type="text/css" href="static/jquery.datetimepicker.css"/>
 
-    <link rel="stylesheet" href="static/fonts/icomoon/style.css">
-
-
-    <link rel="stylesheet" href="static/css/styleIndex.css">
+        <link rel="stylesheet" href="static/css/bootstrap.min.css"> 
+        <link rel="stylesheet" href="static/fonts/icomoon/style.css">
+        <link rel="stylesheet" href="static/css/styleIndex.css">
 
     </head>
 
     <body>
     <main>
-        <h1>Input In Container Fixed To Bottom Of Viewport</h1>
+         <div class="col-12">
+        <div class="site-logo">
+            <h1>
+                <a class="text-black"><span class="text-primary">Anto</span>Dent</a>
+            </h1>
+        </div>
+    </div>
 
+    
     <div class="site-section" id="team-section">
       <div class="container">
         <div class="row mb-5">
@@ -39,7 +45,12 @@
                 <form method="post" action="?">
                     <div>
                         <label for="filter-date">Date</label>
-                        <input type="text" name="filter-date" id="filter-date"/>
+                        <input type="text" 
+                               name="appointment-bob" 
+                               id="filter-date-bob" required />
+                        <button class="login100-form-btn">
+                            Submit
+                        </button>
                     </div>
                 </form>
             </div>
@@ -58,14 +69,16 @@
                 <form method="post" action="?">
                     <div>
                         <label for="filter-date">Date</label>
-                        <input type="text" name="filter-date" id="filter-date"/>
+                        <input type="text" 
+                               name="appointment-jean" 
+                               id="filter-date-jean" required />
+                        <button class="login100-form-btn">
+                            Submit
+                        </button>                        
                     </div>
                 </form>
             </div>
-
-
-
-            </div>
+           </div>
           </div>
 
           <div class="col-lg-4 col-md-6 mb-4 mb-lg-0" data-aos="fade-up" data-aos-delay="200">
@@ -79,12 +92,15 @@
                 <form method="post" action="?">
                     <div>
                         <label for="filter-date">Date</label>
-                        <input type="text" name="filter-date" id="filter-date"/>
+                        <input type="text" 
+                               name="appointment-rick" 
+                               id="filter-date-rick" required />
+                        <button class="login100-form-btn">
+                        Submit
+                    </button>
                     </div>
                 </form>
             </div>
-
-
 
             </div>
           </div>
@@ -104,7 +120,24 @@
         jQuery(document).ready(function () {
             'use strict';
 
-            jQuery('#filter-date, #search-from-date, #search-to-date').datetimepicker();
+            jQuery('#filter-date-bob, \
+                    #filter-date-jean, \
+                    #filter-date-rick').datetimepicker({
+                        onGenerate:function( ct ){
+                        jQuery(this).find('.xdsoft_date.xdsoft_weekend')
+                          .addClass('xdsoft_disabled');
+                      },
+                        weekends:['01.01.2014','02.01.2014','03.01.2014',
+                                  '04.01.2014','05.01.2014','06.01.2014'],
+                        allowTimes:[
+                          '09:00', '10:00', '11:00', '12:00', '13:00', '14:00', 
+                          '15:00', '16:00', '17:00'
+                         ],
+                        dayOfWeek:[
+                            "Mo", "Di", "Mi", 
+                            "Do", "Fr", 
+                       ]
+                });
         });
     </script>
     </body>

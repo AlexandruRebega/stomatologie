@@ -39,7 +39,7 @@ def loginHandler():
 
         #check credentials TODO: hash password
         if password == dbPass:
-            return redirect('/print')
+            return redirect('/appointment')
         else:
             return render_template('login.html')
     else:
@@ -47,8 +47,29 @@ def loginHandler():
 
     return render_template('login.html')
 
-@app.route('/appointment')
+@app.route('/appointment', methods=['GET', 'POST'])
 def appointmentHandler():
+    if request.method == "POST":
+        app.logger.info(request.method)
+        req = request.form
+        if 'appointment-bob' in req:
+            app.logger.info("New appointment request for Bob.")
+            date = req["appointment-bob"]
+            medic_email = "bobcarry@antodent.com"
+        elif 'appointment-jean' in req:
+            app.logger.info("New appointment request for Jean.")
+            date = req["appointment-jean"]
+            medic_email = "jsmith@antodent.com"
+        elif 'appointment-rick' in req:
+            app.logger.info("New appointment request for Rick.")
+            date = req["appointment-rick"]
+            medic_email = "rfisher@antodent.com"
+
+        s = (date, medic_email)
+        print(s)
+
+    else:
+        app.logger.info(request.method)
 
     return render_template('calendar.html')
 
