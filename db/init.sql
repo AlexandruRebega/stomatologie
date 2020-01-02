@@ -216,6 +216,16 @@ END; //
 DELIMITER ;
 
 
+DELIMITER // 
+CREATE PROCEDURE getMedicPass(
+    medic_pass            VARCHAR(40)
+    )
+BEGIN 
+    SELECT medic_pass FROM medici AS m WHERE m.medic_pass = medic_pass;
+END; //
+DELIMITER ;
+
+
 -- DELIMITER // 
 -- CREATE PROCEDURE insertNewAppointment(
 --     medic_email            VARCHAR(40)

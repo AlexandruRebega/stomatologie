@@ -8,5 +8,5 @@ docker-compose down
 docker system prune -a
 
 CONECTARE MYSQL:
-docker run --env="MYSQL_ROOT_PASSWORD=root" -p 32000:3306 mysql
+docker run  -d --env="MYSQL_ROOT_PASSWORD=root" -p 32000:3306 mysql
 mysql -P 32000 -u root -p dent

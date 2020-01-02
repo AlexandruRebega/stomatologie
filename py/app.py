@@ -11,10 +11,12 @@ from mysqlDb import dbGetClientPass
 from mysqlDb import dbInsertNewClient
 from mysqlDb import dbGetMedicId
 from mysqlDb import dbGetClientId
+from mysqlDb import dbGetMedicPass
+from mysqlDb import dbNewAppointment
 from credentials import crCheckPhone
 from credentials import crCheckPassLen
 from credentials import crCheckNameLen
-from credentials import crCheckEmailLen
+from credentials import crCheckEmailLen,crParseDate
 
 app = Flask(__name__)
 # encrypt session info
@@ -46,8 +48,11 @@ def loginHandler():
 
         dbPass = dbGetClientPass(email)
         if dbPass == '':
-            app.logger.info("User was not found!")
-            return redirect('/signup')
+
+            dbPass = dbGetMedicPass(email)
+            if dbPass == '':
+                app.logger.info("User was not found!")
+                return redirect('/signup')
 
         #check credentials TODO: hash password
         if password == dbPass:
@@ -68,14 +73,24 @@ def appointmentHandler():
         if request.method == "POST":
             app.logger.info(request.method)
             req = request.form
+
+            # Logout
+            if 'logoutBtn' in req:
+                app.logger.info("Logout user: " +g.user)
+                session.pop('user', None)
+                return redirect('/')
+
+            # Check appointment data
             if 'appointment-bob' in req:
                 app.logger.info("New appointment request for Bob.")
                 date = req["appointment-bob"]
                 medic_email = "bobcarry@antodent.com"
+
             elif 'appointment-jean' in req:
                 app.logger.info("New appointment request for Jean.")
                 date = req["appointment-jean"]
                 medic_email = "jsmith@antodent.com"
+
             elif 'appointment-rick' in req:
                 app.logger.info("New appointment request for Rick.")
                 date = req["appointment-rick"]
@@ -92,7 +107,10 @@ def appointmentHandler():
                 app.logger.error("Failed to get medic id!")
                 return redirect('/calendar')
 
-            app.logger.info("New appointment for client: " +g.user + "to doctor " +medic_email)
+            app.logger.info("New appointment for client: " +g.user + 
+                "to doctor " +medic_email + "on " + date)
+            crParseDate(date)
+            dbNewAppointment(medic_id, client_id, date)
 
         else:
             app.logger.info(request.method)
