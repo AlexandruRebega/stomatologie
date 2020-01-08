@@ -1,6 +1,8 @@
 import mysql.connector
 from mysql.connector import Error
 
+from credentials import crParseDate
+
 mydb = mysql.connector.connect(
   # host="db",
   host="localhost",
@@ -149,6 +151,36 @@ def dbGetMedicPass(email):
 
     return ''
 
+
+def dbInsertNewAppointment(medic_id, client_id, date, time):
+    try:
+        cursor = mydb.cursor()
+
+        if __db_debug__ :
+            print("Insert new appointment: ")
+            print("-->Medic Id: "+ medic_id)
+            print("-->Client Id: "+ client_id)
+            print("-->Date: "+ date)
+            print("-->Time: "+ time)
+
+        args = [medic_id, client_id, date, time]
+        cursor.callproc('dbInsertNewAppointment', args)
+
+    except Error as e:
+        print(e)
+        if __db_debug__ :
+            print("Insert new appointment failed!")
+        return False
+
+    finally:
+        cursor.close()
+
+    if __db_debug__ :
+        print("Insert new appointment successfully!")
+
+    return True
+
+
 def dbNewAppointment(medic_id, client_id, date):
     if(medic_id == 0):
         print("Invalid medic ID!")
@@ -156,5 +188,19 @@ def dbNewAppointment(medic_id, client_id, date):
     if(client_id == 0):
         print("Invalid client ID!")
         return False;
+
+    dateTime = crParseDate(date)
+    if not dateTime:
+        return False
+
+    date = dateTime[0]
+    startTime = dateTime[1]
+    #get operation length
+    arr = startTime.split(':')
+    hour = int(arr[0])
+    hour += 1
+    endTime = "{0}:{1}:{2}".format(hour, arr[1], arr[2])
+    return dbInsertNewAppointment(medic_id, client_id, startTime, endTime) 
+
         
 

@@ -226,12 +226,16 @@ END; //
 DELIMITER ;
 
 
--- DELIMITER // 
--- CREATE PROCEDURE insertNewAppointment(
---     medic_email            VARCHAR(40)
---     )
--- BEGIN 
---     SELECT medic_id FROM medici AS m WHERE m.medic_id = medic_email;
--- END; //
--- DELIMITER ;
--- INSERT INTO programari VALUES ('1', '2',  '20190420', '09:00:00', '09:10:00');
+DELIMITER // 
+CREATE PROCEDURE insertNewAppointment(
+    medic_id    INT UNSIGNED    NOT NULL,
+    client_id   INT UNSIGNED    NOT NULL,       
+    data        DATE            NOT NULL,
+    startTime   TIME(0)         NOT NULL,
+    endTime     TIME(0)         NOT NULL,
+    )
+BEGIN 
+    INSERT INTO programari VALUES(medic_id, client_id, data, startTime, endTime);
+END; //
+DELIMITER ;
+

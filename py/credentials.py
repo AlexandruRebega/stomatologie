@@ -62,7 +62,7 @@ def crParseDate(dateTime):
     print(arr)
     if len(arr) != 2:
         print("Invalid input : " + str(arr))
-        return
+        return None
 
     date = arr[0]
     time = arr[1]
@@ -70,7 +70,7 @@ def crParseDate(dateTime):
     print(len(arr))
     if len(arr) != 3:
         print("Invalid date format! ",date)
-        return
+        return None
 
     year = int(arr[0])
     month = int(arr[1])
@@ -78,15 +78,16 @@ def crParseDate(dateTime):
     
     if not yearcheck(year):
         print("Invalid year ", year)
-        return
+        return None
 
     if not monthcheck(month):
         print("Invalid month ", month)
-        return    
+        return None   
 
     if not daycheck(month, day):
         print("Invalid day ", day)
-        return
+        return None
+
     # date is valid! 
     date = arr[0]+arr[1]+arr[2]
     
@@ -97,4 +98,4 @@ def crParseDate(dateTime):
     time += ":00"
 
     print("Date:", date, "time:", time)
-    return    
+    return  (date, time) 
