@@ -19,7 +19,7 @@ create table medici(
     medic_email         VARCHAR(40) NOT NULL,
     medic_pass          CHAR(64) NOT NULL,
     medic_tel           VARCHAR(15),
-    medic_dataAngajare  Date,
+    medic_dataAngajare  DATE,
     medic_salariu       INT,
     PRIMARY KEY ( medic_id )    
 );
@@ -36,7 +36,7 @@ create table istoric(
     istoric_id      INT NOT NULL AUTO_INCREMENT,
     operatie_id     INT NOT NULL,
     client_id       INT NOT NULL,
-    istoric_data    Date,
+    istoric_data    DATE,
     FOREIGN KEY (operatie_id)
         REFERENCES operatie(operatie_id),
     FOREIGN KEY (client_id)
@@ -211,28 +211,28 @@ CREATE PROCEDURE getMedicId(
     medic_email            VARCHAR(40)
     )
 BEGIN 
-    SELECT medic_id FROM medici AS m WHERE m.medic_id = medic_email;
+    SELECT medic_id FROM medici AS m WHERE m.medic_email = medic_email;
 END; //
 DELIMITER ;
 
 
 DELIMITER // 
 CREATE PROCEDURE getMedicPass(
-    medic_pass            VARCHAR(40)
+    medic_email            VARCHAR(40)
     )
 BEGIN 
-    SELECT medic_pass FROM medici AS m WHERE m.medic_pass = medic_pass;
+    SELECT medic_pass FROM medici AS m WHERE m.medic_email = medic_email;
 END; //
 DELIMITER ;
 
 
 DELIMITER // 
 CREATE PROCEDURE insertNewAppointment(
-    medic_id    INT UNSIGNED    NOT NULL,
-    client_id   INT UNSIGNED    NOT NULL,       
-    data        DATE            NOT NULL,
-    startTime   TIME(0)         NOT NULL,
-    endTime     TIME(0)         NOT NULL,
+    medic_id    INT,
+    client_id   INT,       
+    data        DATE,
+    startTime   TIME(0),
+    endTime     TIME(0)
     )
 BEGIN 
     INSERT INTO programari VALUES(medic_id, client_id, data, startTime, endTime);

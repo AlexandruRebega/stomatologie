@@ -40,7 +40,7 @@ def loginHandler():
     if request.method == "POST":
 
         req = request.form
-
+        medic = False
         email = req["email"]
         password = req["pass"]
 
@@ -53,11 +53,17 @@ def loginHandler():
             if dbPass == '':
                 app.logger.info("User was not found!")
                 return redirect('/signup')
+            else:
+                medic = True
+                app.logger.info("Medic logging in:" + email)
 
         #check credentials TODO: hash password
         if password == dbPass:
             session['user'] = email
-            return redirect('/appointment')
+            if medic:
+                return redirect('/medic')
+            else:    
+                return redirect('/appointment')
         else:
             return render_template('login.html')
     else:
@@ -168,6 +174,19 @@ def signupHandler():
 
     return render_template('signup.html')
 
+
+@app.route('/medic')
+def medicViewHandler(): 
+    if g.user == 'bobcarry@antodent.com':  #TODO: make a dictionary for doctor/pic
+            doctor = 'doc_person_1.jpg'
+    elif g.user == 'jsmith@antodent.com':
+            doctor = 'doc_person_2.jpg'
+    elif g.user == 'rfisher@antodent.com':
+            doctor = 'doc_person_3.jpg'
+    else:
+        return redirect('login')
+
+    return render_template('medic_calendar.html', doctor=doctor)
 
 
 @app.route('/index')

@@ -152,19 +152,20 @@ def dbGetMedicPass(email):
     return ''
 
 
-def dbInsertNewAppointment(medic_id, client_id, date, time):
+def dbInsertNewAppointment(medic_id, client_id, date, sTime, eTime):
     try:
         cursor = mydb.cursor()
 
         if __db_debug__ :
             print("Insert new appointment: ")
-            print("-->Medic Id: "+ medic_id)
-            print("-->Client Id: "+ client_id)
-            print("-->Date: "+ date)
-            print("-->Time: "+ time)
+            print("-->Medic Id: "+ str(medic_id))
+            print("-->Client Id: "+ str(client_id))
+            print("-->Date: "+ str(date))
+            print("-->Time: "+ str(sTime) + " to "+str(eTime))
 
-        args = [medic_id, client_id, date, time]
-        cursor.callproc('dbInsertNewAppointment', args)
+
+        args = [medic_id, client_id, date, sTime, eTime]
+        cursor.callproc('insertNewAppointment', args)
 
     except Error as e:
         print(e)
@@ -200,7 +201,7 @@ def dbNewAppointment(medic_id, client_id, date):
     hour = int(arr[0])
     hour += 1
     endTime = "{0}:{1}:{2}".format(hour, arr[1], arr[2])
-    return dbInsertNewAppointment(medic_id, client_id, startTime, endTime) 
+    return dbInsertNewAppointment(medic_id, client_id, date, startTime, endTime) 
 
         
 
