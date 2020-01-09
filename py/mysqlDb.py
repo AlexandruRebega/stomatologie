@@ -203,5 +203,30 @@ def dbNewAppointment(medic_id, client_id, date):
     endTime = "{0}:{1}:{2}".format(hour, arr[1], arr[2])
     return dbInsertNewAppointment(medic_id, client_id, date, startTime, endTime) 
 
-        
+
+def dbSelectAppointments(medic_id):
+    try:
+        cursor = mydb.cursor()
+
+        if __db_debug__ :
+            print("Get appointments for medic ID:" + str(medic_id))
+
+        args = [medic_id]
+        cursor.callproc('selectAppointment', args)
+
+        # print out the result
+        for result in cursor.stored_results():
+            res = result.fetchall()
+            if not res:
+                return None
+            print(res)
+            return res[0][0]
+
+    except Error as e:
+        print(e)
+
+    finally:
+        cursor.close()
+
+    return None 
 

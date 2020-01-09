@@ -239,3 +239,16 @@ BEGIN
 END; //
 DELIMITER ;
 
+
+DELIMITER // 
+CREATE PROCEDURE selectAppointment(medic_id INT)
+BEGIN 
+    SELECT c.client_nume, c.client_tel, p.data, p.startTime FROM 
+            programari AS p, clienti AS c
+            WHERE(p.medic_id = medic_id AND c.client_id = p.client_id);
+END; //
+DELIMITER ;
+
+    -- SELECT c.client_nume, c.client_tel, p.data, p.startTime FROM 
+    --         programari AS p, clienti AS c
+    --         WHERE(p.medic_id = 1 AND c.client_id = p.client_id);

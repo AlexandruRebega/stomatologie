@@ -13,6 +13,7 @@ from mysqlDb import dbGetMedicId
 from mysqlDb import dbGetClientId
 from mysqlDb import dbGetMedicPass
 from mysqlDb import dbNewAppointment
+from mysqlDb import dbSelectAppointments
 from credentials import crCheckPhone
 from credentials import crCheckPassLen
 from credentials import crCheckNameLen
@@ -109,7 +110,7 @@ def appointmentHandler():
                 return redirect('/login')
 
             medic_id = dbGetMedicId(medic_email)
-            if medic_email == 0:
+            if medic_id == 0:
                 app.logger.error("Failed to get medic id!")
                 return redirect('/calendar')
 
@@ -185,6 +186,12 @@ def medicViewHandler():
             doctor = 'doc_person_3.jpg'
     else:
         return redirect('login')
+
+    medic_id = dbGetMedicId(g.user)
+    if medic_id == 0:
+        app.logger.error("Failed to get medic id!")  
+    else:  
+        dbSelectAppointments(medic_id)
 
     return render_template('medic_calendar.html', doctor=doctor)
 
