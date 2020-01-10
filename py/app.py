@@ -7,6 +7,7 @@ import os
 import logging
 import sys
 
+from appointmentDetails import AppointmentDetails
 from mysqlDb import dbGetClientPass
 from mysqlDb import dbInsertNewClient
 from mysqlDb import dbGetMedicId
@@ -191,7 +192,20 @@ def medicViewHandler():
     if medic_id == 0:
         app.logger.error("Failed to get medic id!")  
     else:  
-        dbSelectAppointments(medic_id)
+        result = dbSelectAppointments(medic_id)
+
+        if result == None:
+           app.logger.info("No appointments found.") 
+           return render_template('medic_calendar.html', doctor=doctor) 
+
+        resList = []
+        for res in result:
+            resList.append(AppointmentDetails(res[0], res[1], res[2], res[3]))
+
+        for apint in resList:
+            print(apint.name, apint.tel, apint.date, apint.hour)
+            
+        return render_template('medic_calendar.html', doctor=doctor, list=resList) 
 
     return render_template('medic_calendar.html', doctor=doctor)
 

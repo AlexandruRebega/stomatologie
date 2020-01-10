@@ -220,7 +220,7 @@ def dbSelectAppointments(medic_id):
             if not res:
                 return None
             print(res)
-            return res[0][0]
+            return res
 
     except Error as e:
         print(e)

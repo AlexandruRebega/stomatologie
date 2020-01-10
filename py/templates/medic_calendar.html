@@ -25,8 +25,13 @@
 <body>
     <main>
 
-      <div class="medic_ico">
-        <img src="static/images/{{doctor}}" alt="Image" class="img-fluid rounded-circle"/>
+      <div class="top_col">
+        <div class="medic_ico">
+          <img src="static/images/{{doctor}}" alt="Image" class="img-fluid rounded-circle"/>
+        </div>
+        <div class="center_text">
+          <p>My schedule</p>
+        </div>
       </div>
 
       <div class="limiter">
@@ -50,28 +55,16 @@
               <div class="table100-body js-pscroll">
                 <table>
                   <tbody>
+
+                    {% for appointment in list %}
                     <tr class="row100 body">
-                      <td class="cell100 column1">Like a butterfly</td>
-                      <td class="cell100 column2">Boxing</td>
-                      <td class="cell100 column3">9:00 AM - 11:00 AM</td>
-                      <td class="cell100 column4">Aaron Chapman</td>
+                      <td class="cell100 column1">{{appointment.name}}</td>
+                      <td class="cell100 column2">{{appointment.tel}}</td>
+                      <td class="cell100 column3">{{appointment.date}}</td>
+                      <td class="cell100 column4">{{appointment.hour}}</td>
 <!--                       <td class="cell100 column5">10</td> -->
                     </tr>
-
-                    <tr class="row100 body">
-                      <td class="cell100 column1">Mind & Body</td>
-                      <td class="cell100 column2">Yoga</td>
-                      <td class="cell100 column3">8:00 AM - 9:00 AM</td>
-                      <td class="cell100 column4">Adam Stewart</td>
-                    </tr>
-
-                    <tr class="row100 body">
-                      <td class="cell100 column1">Crit Cardio</td>
-                      <td class="cell100 column2">Gym</td>
-                      <td class="cell100 column3">9:00 AM - 10:00 AM</td>
-                      <td class="cell100 column4">Aaron Chapman</td>
-                    </tr>
-
+                    {% endfor %}
 
                   </tbody>
                 </table>
