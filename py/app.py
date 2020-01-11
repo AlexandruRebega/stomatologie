@@ -8,6 +8,8 @@ import logging
 import sys
 
 from appointmentDetails import AppointmentDetails
+from operations import Operation
+
 from mysqlDb import dbGetClientPass
 from mysqlDb import dbInsertNewClient
 from mysqlDb import dbGetMedicId
@@ -15,6 +17,7 @@ from mysqlDb import dbGetClientId
 from mysqlDb import dbGetMedicPass
 from mysqlDb import dbNewAppointment
 from mysqlDb import dbSelectAppointments
+from mysqlDb import dbGetAllOperations
 from credentials import crCheckPhone
 from credentials import crCheckPassLen
 from credentials import crCheckNameLen
@@ -78,6 +81,16 @@ def loginHandler():
 @app.route('/appointment', methods=['GET', 'POST'])
 def appointmentHandler():
     if g.user:
+
+        opList = dbGetAllOperations()
+        if not opList:
+            app.logger.info("Could not retrive operations from database")
+            # TODO:
+
+        operations = []
+        for oper in opList:
+            operations.append(Operation(oper[0],oper[1], oper[2], oper[3]))
+
         if request.method == "POST":
             app.logger.info(request.method)
             req = request.form
@@ -104,6 +117,10 @@ def appointmentHandler():
                 date = req["appointment-rick"]
                 medic_email = "rfisher@antodent.com"
 
+            opId = req["operationSelector"]
+            if opId == 0:
+                app.logger.error("No operation selected!")
+
             # user must be logged in to get here, so we can retrive his email from session`s g.user
             client_id = dbGetClientId(g.user)
             if client_id == 0:
@@ -118,12 +135,12 @@ def appointmentHandler():
             app.logger.info("New appointment for client: " +g.user + 
                 "to doctor " +medic_email + "on " + date)
             crParseDate(date)
-            dbNewAppointment(medic_id, client_id, date)
+            dbNewAppointment(medic_id, client_id, date, opId)
 
         else:
             app.logger.info(request.method)
 
-        return render_template('calendar.html')
+        return render_template('calendar.html', operationList = operations)
     else:
         return redirect('/')
 
@@ -177,7 +194,7 @@ def signupHandler():
     return render_template('signup.html')
 
 
-@app.route('/medic')
+@app.route('/medic', methods=["GET", "POST"])
 def medicViewHandler(): 
     if g.user == 'bobcarry@antodent.com':  #TODO: make a dictionary for doctor/pic
             doctor = 'doc_person_1.jpg'
@@ -187,6 +204,16 @@ def medicViewHandler():
             doctor = 'doc_person_3.jpg'
     else:
         return redirect('login')
+
+    if request.method == "POST":
+        app.logger.info(request.method)
+        req = request.form
+
+        # Logout
+        if 'logoutBtn' in req:
+            app.logger.info("Logout user: " +g.user)
+            session.pop('user', None)
+            return redirect('/')
 
     medic_id = dbGetMedicId(g.user)
     if medic_id == 0:
@@ -200,11 +227,9 @@ def medicViewHandler():
 
         resList = []
         for res in result:
-            resList.append(AppointmentDetails(res[0], res[1], res[2], res[3]))
+            print(res)
+            resList.append(AppointmentDetails(res[0], res[1], res[2], res[3], res[4], res[5]))
 
-        for apint in resList:
-            print(apint.name, apint.tel, apint.date, apint.hour)
-            
         return render_template('medic_calendar.html', doctor=doctor, list=resList) 
 
     return render_template('medic_calendar.html', doctor=doctor)

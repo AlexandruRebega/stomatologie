@@ -45,15 +45,19 @@ create table istoric(
     PRIMARY KEY ( istoric_id )
 );
 
--- TODO: add operatie_id, make medic_id, client_id and operatie_id FOREIGN KEYs
+
 CREATE TABLE programari (
     medic_id    INT UNSIGNED    NOT NULL,
     client_id   INT UNSIGNED    NOT NULL,       
     data        DATE            NOT NULL,
     startTime   TIME(0)         NOT NULL,
     endTime     TIME(0)         NOT NULL,
+    operatie_id INT,
 
     CONSTRAINT PRIMARY KEY (medic_id, data, startTime),
+
+    FOREIGN KEY (operatie_id)
+        REFERENCES operatie(operatie_id),
 
     CONSTRAINT mustStartOnTenMinuteBoundary CHECK (
         EXTRACT(MINUTE FROM startTime) % 10 = 0
@@ -232,10 +236,11 @@ CREATE PROCEDURE insertNewAppointment(
     client_id   INT,       
     data        DATE,
     startTime   TIME(0),
-    endTime     TIME(0)
+    endTime     TIME(0),
+    operatie_id INT
     )
 BEGIN 
-    INSERT INTO programari VALUES(medic_id, client_id, data, startTime, endTime);
+    INSERT INTO programari VALUES(medic_id, client_id, data, startTime, endTime, operatie_id);
 END; //
 DELIMITER ;
 
@@ -243,11 +248,23 @@ DELIMITER ;
 DELIMITER // 
 CREATE PROCEDURE selectAppointment(medic_id INT)
 BEGIN 
-    SELECT c.client_nume, c.client_tel, p.data, p.startTime FROM 
-            programari AS p, clienti AS c
-            WHERE(p.medic_id = medic_id AND c.client_id = p.client_id);
+    SELECT c.client_nume, c.client_tel, p.data, p.startTime, p.operatie_id, op.operatie_nume 
+        FROM 
+            programari AS p, clienti AS c, operatie AS op
+        WHERE(p.medic_id = medic_id AND 
+              c.client_id = p.client_id AND 
+              op.operatie_id = p.operatie_id);
 END; //
 DELIMITER ;
+
+
+DELIMITER // 
+CREATE PROCEDURE getAllOperations()
+BEGIN 
+    SELECT * FROM operatie;
+END; //
+DELIMITER ;
+
 
     -- SELECT c.client_nume, c.client_tel, p.data, p.startTime FROM 
     --         programari AS p, clienti AS c

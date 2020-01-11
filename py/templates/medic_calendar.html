@@ -1,37 +1,50 @@
 <!DOCTYPE html>
 <html>
    <head>
-        <title>AntoDent</title>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="stylesheet" type="text/css" href="static/css/medic_calendar.css"/>
-        <link rel="stylesheet" href="static/css/bootstrap.min.css"> 
+      <title>AntoDent</title>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <link rel="stylesheet" type="text/css" href="static/css/medic_calendar.css"/>
+      <link rel="stylesheet" href="static/css/bootstrap.min.css"> 
 
-        <link rel="stylesheet" type="text/css" href="static/vendor/bootstrap/css/bootstrap.min.css">
-<!--===========================================================================-->
-  <link rel="stylesheet" type="text/css" href="static/fonts/font-awesome-4.7.0/css/font-awesome.min.css">
-<!--===========================================================================-->
-  <link rel="stylesheet" type="text/css" href="static/vendor/animate/animate.css">
-<!--===========================================================================-->
-  <link rel="stylesheet" type="text/css" href="static/vendor/select2/select2.min.css">
-<!--===========================================================================-->
-  <link rel="stylesheet" type="text/css" href="static/vendor/perfect-scrollbar/perfect-scrollbar.css">
-<!--===========================================================================-->
-  <link rel="stylesheet" type="text/css" href="static/css/util.css">
-  <link rel="stylesheet" type="text/css" href="static/css/table100.css">
+      <link rel="stylesheet" type="text/css" href="static/vendor/bootstrap/css/bootstrap.min.css">
+    <!--===========================================================================-->
+      <link rel="stylesheet" type="text/css" href="static/fonts/font-awesome-4.7.0/css/font-awesome.min.css">
+    <!--===========================================================================-->
+      <link rel="stylesheet" type="text/css" href="static/vendor/animate/animate.css">
+    <!--===========================================================================-->
+      <link rel="stylesheet" type="text/css" href="static/vendor/select2/select2.min.css">
+    <!--===========================================================================-->
+      <link rel="stylesheet" type="text/css" href="static/vendor/perfect-scrollbar/perfect-scrollbar.css">
+    <!--===========================================================================-->
+      <link rel="stylesheet" type="text/css" href="static/css/util.css">
+      <link rel="stylesheet" type="text/css" href="static/css/table100.css">
+      <link rel="stylesheet" href="static/fonts/icomoon/style.css">
+      <link rel="stylesheet" href="static/css/styleIndex.css">
+      <link rel="stylesheet" href="static/css/icon.css">
 
    </head>
 
 <body>
     <main>
+      <div class="col-12">
+          <div class="site-logo">
+            <div class="top_col">
+              <h1>
+                <a class="text-black"><span class="text-primary">Anto</span>Dent</a>
+                <img src="static/images/{{doctor}}" alt="Image" class="img-fluid rounded-circle"/> 
+              </h1>
+            </div>
+          </div>
 
-      <div class="top_col">
-        <div class="medic_ico">
-          <img src="static/images/{{doctor}}" alt="Image" class="img-fluid rounded-circle"/>
-        </div>
-        <div class="center_text">
-          <p>My schedule</p>
-        </div>
+          <form method="POST">
+              <div class="navigation">
+                  <a class="button" href="" >
+                      <img src="/static/images/icons/user_ico.png" id="pressed" >
+                      <input class="logout" type="submit" name="logoutBtn" value= "LOGOUT">
+                  </a>
+              </div>
+          </form>
       </div>
 
       <div class="limiter">
@@ -46,6 +59,7 @@
                       <th class="cell100 column2">Telephone</th>
                       <th class="cell100 column3">Date</th>
                       <th class="cell100 column4">Hour</th>
+                      <th class="cell100 column4">Operation</th>
                       <!-- <th class="cell100 column5">Spots</th> -->
                     </tr>
                   </thead>
@@ -62,6 +76,7 @@
                       <td class="cell100 column2">{{appointment.tel}}</td>
                       <td class="cell100 column3">{{appointment.date}}</td>
                       <td class="cell100 column4">{{appointment.hour}}</td>
+                      <td class="cell100 column4">{{appointment.opName}}</td>
 <!--                       <td class="cell100 column5">10</td> -->
                     </tr>
                     {% endfor %}

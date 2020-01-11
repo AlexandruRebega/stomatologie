@@ -152,7 +152,7 @@ def dbGetMedicPass(email):
     return ''
 
 
-def dbInsertNewAppointment(medic_id, client_id, date, sTime, eTime):
+def dbInsertNewAppointment(medic_id, client_id, date, sTime, eTime, operation):
     try:
         cursor = mydb.cursor()
 
@@ -164,7 +164,7 @@ def dbInsertNewAppointment(medic_id, client_id, date, sTime, eTime):
             print("-->Time: "+ str(sTime) + " to "+str(eTime))
 
 
-        args = [medic_id, client_id, date, sTime, eTime]
+        args = [medic_id, client_id, date, sTime, eTime, operation]
         cursor.callproc('insertNewAppointment', args)
 
     except Error as e:
@@ -182,7 +182,7 @@ def dbInsertNewAppointment(medic_id, client_id, date, sTime, eTime):
     return True
 
 
-def dbNewAppointment(medic_id, client_id, date):
+def dbNewAppointment(medic_id, client_id, date, op):
     if(medic_id == 0):
         print("Invalid medic ID!")
         return False;
@@ -201,7 +201,7 @@ def dbNewAppointment(medic_id, client_id, date):
     hour = int(arr[0])
     hour += 1
     endTime = "{0}:{1}:{2}".format(hour, arr[1], arr[2])
-    return dbInsertNewAppointment(medic_id, client_id, date, startTime, endTime) 
+    return dbInsertNewAppointment(medic_id, client_id, date, startTime, endTime, op) 
 
 
 def dbSelectAppointments(medic_id):
@@ -219,7 +219,7 @@ def dbSelectAppointments(medic_id):
             res = result.fetchall()
             if not res:
                 return None
-            print(res)
+            # print(res)
             return res
 
     except Error as e:
@@ -230,3 +230,25 @@ def dbSelectAppointments(medic_id):
 
     return None 
 
+def dbGetAllOperations():
+    try:
+        cursor = mydb.cursor()
+
+        if __db_debug__ :
+            print("Get operations...")  
+
+        cursor.callproc('getAllOperations')
+
+        for result in cursor.stored_results():
+            res = result.fetchall()
+            if not res:
+                return None
+            return res
+
+    except Error as e:
+        print(e)
+
+    finally:
+        cursor.close()
+
+    return None 

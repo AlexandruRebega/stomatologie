@@ -15,7 +15,7 @@
 
     <body>
     <main>
-         <div class="col-12">
+    <div class="col-12">
         <div class="site-logo">
             <h1>
                 <a class="text-black"><span class="text-primary">Anto</span>Dent</a>
@@ -62,6 +62,18 @@
                             Submit
                         </button>
                     </div>
+                    <fieldset>
+                      <!-- <legend>bllaaa.</legend> -->
+                      <p>
+                         <label>Select your operation</label>
+                         <select id = "opList" name="operationSelector">
+                            <option value = "0">Please select...</option>
+                            {% for operation in operationList %}
+                           <option value = "{{operation.id}}">{{ operation.name }}</option>
+                           {% endfor %}
+                         </select>
+                      </p>
+                    </fieldset>
                 </form>
             </div>
 
@@ -86,6 +98,19 @@
                             Submit
                         </button>                        
                     </div>
+
+                    <fieldset>
+                      <!-- <legend>bllaaa.</legend> -->
+                      <p>
+                         <label>Select your operation</label>
+                         <select id = "opList" name="operationSelector">
+                            <option value = "0">Please select...</option>
+                            {% for operation in operationList %}
+                           <option value = "{{operation.id}}">{{ operation.name }}</option>
+                           {% endfor %}
+                         </select>
+                      </p>
+                    </fieldset>
                 </form>
             </div>
            </div>
@@ -109,12 +134,25 @@
                         Submit
                     </button>
                     </div>
+                    <fieldset>
+                      <!-- <legend>bllaaa.</legend> -->
+                      <p>
+                         <label>Select your operation</label>
+                         <select id = "opList" name="operationSelector">
+                            <option value = "0">Please select...</option>
+                            {% for operation in operationList %}
+                           <option value = "{{operation.id}}">{{ operation.name }}</option>
+                           {% endfor %}
+                         </select>
+                      </p>
+                    </fieldset>
                 </form>
             </div>
 
             </div>
           </div>
         </div>
+
       </div>
     </div>
 
