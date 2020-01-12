@@ -299,3 +299,34 @@ END; //
 DELIMITER ;
 
 
+-- START EVENT THREAD
+SET GLOBAL event_scheduler = ON;
+
+DELIMITER // 
+CREATE EVENT removeOldAppointmetsEvent
+    ON SCHEDULE
+      EVERY 1 DAY
+ON COMPLETION PRESERVE
+    DO
+      BEGIN
+            INSERT INTO istoric (operatie_id, client_id, data)
+                SELECT operatie_id, client_id, data FROM programari AS p
+                WHERE  WHERE p.data <= DATE(NOW());
+            DELETE FROM programari p WHERE p.data <= DATE(NOW());
+      END //
+
+DELIMITER ;
+
+-- insert into programari values('1', '1', '20190420', '09:00:00', '10:00:00', '7' );
+-- This procedure is not used by the application but can be used to manually test the remove event:'removeOldAppointmetsEvent'
+DELIMITER // 
+CREATE PROCEDURE testRemoveEvent()
+    BEGIN 
+        INSERT INTO istoric (operatie_id, client_id, istoric_data)
+            SELECT operatie_id, client_id, data 
+            FROM programari AS p
+            WHERE p.data <= DATE(NOW());
+        DELETE FROM programari p WHERE p.data <= DATE(NOW());
+    END; //
+DELIMITER ;
+
