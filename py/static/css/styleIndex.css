@@ -1108,3 +1108,9 @@ h1, h2, h3, h4, h5,
   .post-meta a {
     color: #fff;
     border-bottom: 1px solid rgba(255, 255, 255, 0.5); }
+
+
+.fill_row{
+  width: 100%
+  padding: 10px;
+}

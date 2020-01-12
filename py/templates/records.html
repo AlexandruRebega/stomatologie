@@ -22,7 +22,6 @@
       <link rel="stylesheet" href="static/fonts/icomoon/style.css">
       <link rel="stylesheet" href="static/css/styleIndex.css">
       <link rel="stylesheet" href="static/css/icon.css">
-      <link href="static/css/search.css" rel="stylesheet" />
 
    </head>
 
@@ -30,57 +29,34 @@
     <main>
       <div class="col-12">
           <div class="site-logo">
-            <div class="top_col">
-              <h1>
-                <a class="text-black"><span class="text-primary">Anto</span>Dent</a>
-
-                <div class="block-team-member-small text-center rounded">
-                  <figure>
-                    <img src="static/images/{{doctor}}" alt="Image" class="img-fluid rounded-circle">
-                  </figure>
-                </div>
-
-              </h1>
+            <div class="site-section gradient-bg-1">
+              <div class="fill_row"> 
+                <h1>
+                  <a class="text-black"><span class="text-primary">Anto</span>Dent</a>
+                  <div class="block-team-member-small text-center rounded">
+  <!--                   <figure>
+                      <img src="static/images/{{doctor}}" alt="Image" class="img-fluid rounded-circle">
+                    </figure> -->
+                  </div>
+                </h1>
+              </div>
+              <form method="POST">
+                  <div class="navigation">
+                      <a class="button" href="" >
+                          <img src="/static/images/icons/user_ico.png" id="pressed" >
+                          <input class="logout" type="submit" name="logoutBtn" value= "LOGOUT">
+                      </a>
+                  </div>
+              </form>
             </div>
           </div>
-
-          <form method="POST">
-              <div class="navigation">
-                  <a class="button" href="" >
-                      <img src="/static/images/icons/user_ico.png" id="pressed" >
-                      <input class="logout" type="submit" name="logoutBtn" value= "LOGOUT">
-                  </a>
-              </div>
-          </form>
       </div>
-
-      <div class="site-section gradient-bg-1">
-        <div class="container">
-         <div class="s01">
-            <form method="POST">
-              <fieldset>
-                <legend>Search medical records</legend>
-              </fieldset>
-              <div class="inner-form">
-                <div class="input-field first-wrap">
-                  <input name="search_cl" type="text" 
-                         placeholder="Enter client email" />
-                </div>
-                <div class="input-field third-wrap">
-                  <button class="btn-search" type="submit" name="find_client">Search</button>
-                </div>
-              </div>
-            </form>
-          </div>
-        </div>
-      </div>
-
-
 
 
       <div class="limiter">
         <div class="container-table100">
           <div class="wrap-table100">
+
             <div class="table100 ver1 m-b-110">
               <div class="table100-head">
                 <table>
@@ -88,9 +64,8 @@
                     <tr class="row100 head">
                       <th class="cell100 column1">Client name</th>
                       <th class="cell100 column2">Telephone</th>
-                      <th class="cell100 column3">Date</th>
-                      <th class="cell100 column4">Hour</th>
-                      <th class="cell100 column4">Operation</th>
+<!--                       <th class="cell100 column3">Date</th>
+                      <th class="cell100 column4">Operation</th> -->
                       <!-- <th class="cell100 column5">Spots</th> -->
                     </tr>
                   </thead>
@@ -101,25 +76,53 @@
                 <table>
                   <tbody>
 
-                    {% for appointment in list %}
                     <tr class="row100 body">
-                      <td class="cell100 column1">{{appointment.name}}</td>
-                      <td class="cell100 column2">{{appointment.tel}}</td>
-                      <td class="cell100 column3">{{appointment.date}}</td>
-                      <td class="cell100 column4">{{appointment.hour}}</td>
-                      <td class="cell100 column5">{{appointment.opName}}</td>
-<!--                       <td class="cell100 column5">10</td> -->
+                      <td class="cell100 column1">{{client_name}}</td>
+                      <td class="cell100 column2">{{client_tel}}</td>
                     </tr>
-                    {% endfor %}
 
                   </tbody>
                 </table>
               </div>   
           </div>
+
+          <div class="table100 ver1 m-b-110">
+            <div class="table100-head">
+              <table>
+                <thead>
+                  <tr class="row100 head">
+                    <th class="cell100 column1">Date</th>
+                    <th class="cell100 column2">Operation</th>
+                    <!-- <th class="cell100 column5">Spots</th> -->
+                  </tr>
+                </thead>
+              </table>
+            </div>
+
+            <div class="table100-body js-pscroll">
+              <table>
+                <tbody>
+
+                  {% for record in list %}
+                  <tr class="row100 body">
+                    <td class="cell100 column1">{{record.date}}</td>
+                    <td class="cell100 column2">{{record.operation}}</td>
+                  </tr>
+                  {% endfor %}
+
+                </tbody>
+              </table>
+            </div>   
+        </div>
+
+
         </div>
       </div>
     </div>
 
-   </main>
-   </body>
+
+
+
+    </main>
+  </body>
 </html>

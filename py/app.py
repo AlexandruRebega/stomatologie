@@ -9,6 +9,7 @@ import sys
 
 from appointmentDetails import AppointmentDetails
 from operations import Operation
+from records import Record
 
 from mysqlDb import dbGetClientPass
 from mysqlDb import dbInsertNewClient
@@ -18,6 +19,7 @@ from mysqlDb import dbGetMedicPass
 from mysqlDb import dbNewAppointment
 from mysqlDb import dbSelectAppointments
 from mysqlDb import dbGetAllOperations
+from mysqlDb import dbGetClientRecords
 from credentials import crCheckPhone
 from credentials import crCheckPassLen
 from credentials import crCheckNameLen
@@ -215,6 +217,16 @@ def medicViewHandler():
             session.pop('user', None)
             return redirect('/')
 
+        if 'find_client' in req:
+            app.logger.info("Load user records: ")
+            email = req['search_cl']
+            client_id = dbGetClientId(email)
+            if client_id == 0:
+                app.logger.error("Client email not found!")
+            else:
+                session['client_id'] = client_id
+                return redirect('/records')    
+
     medic_id = dbGetMedicId(g.user)
     if medic_id == 0:
         app.logger.error("Failed to get medic id!")  
@@ -235,9 +247,38 @@ def medicViewHandler():
     return render_template('medic_calendar.html', doctor=doctor)
 
 
+@app.route('/records', methods=["GET", "POST"])
+def recordsHandler():
+    if not g.user:
+        return redirect('/')
+
+    if request.method == "POST":
+        app.logger.info(request.method)
+        req = request.form
+            # Logout
+        if 'logoutBtn' in req:
+            app.logger.info("Logout user: " +g.user)
+            session.pop('user', None)
+            return redirect('/')
+    
+    client_id = session.get('client_id', None)  
+    result = dbGetClientRecords(client_id)
+    if result == None:
+       app.logger.info("No medical records found.") 
+
+    resList = []
+    for res in result:
+        print(res)
+        resList.append(Record(res[0], res[1], res[2], res[3]))
+
+    return render_template('records.html', list = resList,
+                                           client_name = resList[0].name,
+                                           client_tel = resList[0].tel)
+
+
 @app.route('/index')
 def indexHandler(): 
-    return index()
+    return redirect('/')
 
 @app.route('/')
 def index(): 
@@ -246,3 +287,4 @@ def index():
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', debug=True)
+

@@ -195,7 +195,7 @@ CREATE PROCEDURE insertNewClient(
    client_tel       VARCHAR(15)
 )
 BEGIN
-INSERT INTO clienti VALUES (NULL, client_nume, client_email, client_pass, client_tel);
+    INSERT INTO clienti VALUES (NULL, client_nume, client_email, client_pass, client_tel);
 END; //
 DELIMITER ;
 
@@ -266,6 +266,36 @@ END; //
 DELIMITER ;
 
 
-    -- SELECT c.client_nume, c.client_tel, p.data, p.startTime FROM 
-    --         programari AS p, clienti AS c
-    --         WHERE(p.medic_id = 1 AND c.client_id = p.client_id);
+DELIMITER // 
+CREATE PROCEDURE insertNewIstoricRecord(
+    operatie_id     INT,
+    client_id       INT,
+    istoric_data    DATE)
+BEGIN 
+    INSERT INTO istoric VALUES (NULL, operatie_id, client_id, istoric_data);
+END; //
+DELIMITER ;
+
+
+DELIMITER // 
+CREATE PROCEDURE getAllIstoricRecords()
+BEGIN 
+    SELECT * FROM istoric;
+END; //
+DELIMITER ;
+
+
+DELIMITER // 
+CREATE PROCEDURE getClientRecords(client_id INT)
+BEGIN 
+    SELECT c.client_nume, c.client_tel, o.operatie_nume, i.istoric_data
+    FROM clienti AS c,
+         istoric AS i,
+         operatie AS o
+         WHERE (i.client_id = client_id AND 
+                i.client_id = c.client_id AND
+                i.operatie_id = o.operatie_id);
+END; //
+DELIMITER ;
+
+

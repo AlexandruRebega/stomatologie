@@ -2,12 +2,12 @@
 	float: left;
    	padding: 10px;
 }
-.medic_ico {
-   margin: 1em auto;
-   overflow: hidden;
-   width: 53px;
-   height: 53px;
-}
+
+.block-team-member-small {
+  padding: 3px;
+  }
+  .block-team-member-small figure img {
+    width: 53px; }
 
 .center_text{
 	float: right;

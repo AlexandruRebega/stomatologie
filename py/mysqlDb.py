@@ -1,5 +1,6 @@
 import mysql.connector
 from mysql.connector import Error
+import logging
 
 from credentials import crParseDate
 
@@ -13,10 +14,6 @@ mydb = mysql.connector.connect(
   database="dent"
 )
 
-mycursor = mydb.cursor()
-mycursor.execute("SELECT * FROM Numbers")
-
-myresult = mycursor.fetchall()
 
 __db_debug__ = True
 
@@ -204,6 +201,7 @@ def dbNewAppointment(medic_id, client_id, date, op):
     return dbInsertNewAppointment(medic_id, client_id, date, startTime, endTime, op) 
 
 
+# returns c.client_nume, c.client_tel, p.data, p.startTime, p.operatie_id, op.operatie_nume 
 def dbSelectAppointments(medic_id):
     try:
         cursor = mydb.cursor()
@@ -230,6 +228,7 @@ def dbSelectAppointments(medic_id):
 
     return None 
 
+
 def dbGetAllOperations():
     try:
         cursor = mydb.cursor()
@@ -252,3 +251,55 @@ def dbGetAllOperations():
         cursor.close()
 
     return None 
+
+
+def dbInsertNewIstoricRecord(operatie_id, client_id, date):
+    try:
+        cursor = mydb.cursor()
+
+        if __db_debug__ :
+            print("Insert new medical record")
+
+        args = [operatie_id, client_id, date]
+        cursor.callproc('insertNewIstoricRecord', args)
+
+    except Error as e:
+        print(e)
+        if __db_debug__ :
+            print("Insert new record failed!")
+        return False
+
+    finally:
+        cursor.close()
+
+    if __db_debug__ :
+        print("Insert new medical record successfully!")
+
+    return True
+
+
+# returns c.client_nume, c.client_tel, o.operatie_nume, i.istoric_data
+def dbGetClientRecords(client_id):
+    try:
+        cursor = mydb.cursor()
+
+        if __db_debug__ :
+            print("Get operations...")  
+
+        args = [client_id]
+        cursor.callproc('getClientRecords', args)
+
+        for result in cursor.stored_results():
+            res = result.fetchall()
+            if not res:
+                return None
+            return res
+
+    except Error as e:
+        print(e)
+
+    finally:
+        cursor.close()
+
+    return None 
+
