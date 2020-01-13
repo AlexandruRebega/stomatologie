@@ -121,22 +121,22 @@ INSERT INTO operatie VALUES(NULL, 'Dental Radiology', '125.00', '1');   -- 12
 INSERT INTO operatie VALUES(NULL, 'Pediatric Dentistry', '75.00', '1'); -- 13
 
 
-CREATE TABLE Numbers (number INT UNSIGNED PRIMARY KEY);
+-- CREATE TABLE Numbers (number INT UNSIGNED PRIMARY KEY);
 
-DELIMITER //
-CREATE PROCEDURE populateNumbers()
-BEGIN
-    SET @x = 0;
-    WHILE @x < 1024 DO
-        INSERT INTO Numbers VALUES (@x);
-        SET @x = @x + 1;
-    END WHILE;
-    SET @x = NULL;
-END; //
-DELIMITER ;
+-- DELIMITER //
+-- CREATE PROCEDURE populateNumbers()
+-- BEGIN
+--     SET @x = 0;
+--     WHILE @x < 1024 DO
+--         INSERT INTO Numbers VALUES (@x);
+--         SET @x = @x + 1;
+--     END WHILE;
+--     SET @x = NULL;
+-- END; //
+-- DELIMITER ;
 
-CALL populateNumbers;
-DROP PROCEDURE populateNumbers;
+-- CALL populateNumbers;
+-- DROP PROCEDURE populateNumbers;
 
 
 DELIMITER //
@@ -265,6 +265,23 @@ BEGIN
 END; //
 DELIMITER ;
 
+DELIMITER // 
+CREATE PROCEDURE getAllDiscountOperations(
+    client_email VARCHAR(40))
+BEGIN 
+    SELECT o.operatie_id, o.operatie_nume, o.operatie_pret, FORMAT(0.8 * o.operatie_pret, 2) AS operatie_discount, o.operatie_durata
+    FROM operatie AS o,
+         clienti AS c,
+         istoric AS i
+    WHERE (c.client_email = client_email AND
+           i.client_id = c.client_id AND
+           o.operatie_pret > 200 AND
+           (SELECT COUNT(*) FROM istoric AS j
+            WHERE j.client_id = c.client_id AND
+            j.istoric_data > DATE_SUB(now(), INTERVAL 6 MONTH)) > 3)
+    GROUP BY o.operatie_id;
+END; //
+DELIMITER ;
 
 DELIMITER // 
 CREATE PROCEDURE insertNewIstoricRecord(
@@ -311,7 +328,7 @@ ON COMPLETION PRESERVE
       BEGIN
             INSERT INTO istoric (operatie_id, client_id, data)
                 SELECT operatie_id, client_id, data FROM programari AS p
-                WHERE  WHERE p.data <= DATE(NOW());
+                WHERE p.data <= DATE(NOW());
             DELETE FROM programari p WHERE p.data <= DATE(NOW());
       END //
 

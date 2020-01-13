@@ -8,7 +8,7 @@ import logging
 import sys
 
 from appointmentDetails import AppointmentDetails
-from operations import Operation
+from operations import Operation, DiscountOperation
 from records import Record
 
 from mysqlDb import dbGetClientPass
@@ -19,6 +19,7 @@ from mysqlDb import dbGetMedicPass
 from mysqlDb import dbNewAppointment
 from mysqlDb import dbSelectAppointments
 from mysqlDb import dbGetAllOperations
+from mysqlDb import dbGetAllDiscountOperations
 from mysqlDb import dbGetClientRecords
 from credentials import crCheckPhone
 from credentials import crCheckPassLen
@@ -64,7 +65,7 @@ def loginHandler():
                 medic = True
                 app.logger.info("Medic logging in:" + email)
 
-        #check credentials TODO: hash password
+        #check credentials
         if password == dbPass:
             session['user'] = email
             if medic:
@@ -87,11 +88,17 @@ def appointmentHandler():
         opList = dbGetAllOperations()
         if not opList:
             app.logger.info("Could not retrive operations from database")
-            # TODO:
+            return render_template('/')
+        
+        opDiscountList = dbGetAllDiscountOperations(g.user)
 
         operations = []
         for oper in opList:
             operations.append(Operation(oper[0],oper[1], oper[2], oper[3]))
+
+        operationsDiscount = []
+        for oper in opDiscountList:
+            operationsDiscount.append(DiscountOperation(oper[0],oper[1], oper[2], oper[3], oper[4]))
 
         if request.method == "POST":
             app.logger.info(request.method)
@@ -99,7 +106,7 @@ def appointmentHandler():
 
             # Logout
             if 'logoutBtn' in req:
-                app.logger.info("Logout user: " +g.user)
+                app.logger.info("Logout user: " + g.user)
                 session.pop('user', None)
                 return redirect('/')
 
@@ -134,15 +141,15 @@ def appointmentHandler():
                 app.logger.error("Failed to get medic id!")
                 return redirect('/calendar')
 
-            app.logger.info("New appointment for client: " +g.user + 
-                "to doctor " +medic_email + "on " + date)
+            app.logger.info("New appointment for client: " + g.user + 
+                "to doctor " + medic_email + "on " + date)
             crParseDate(date)
             dbNewAppointment(medic_id, client_id, date, opId)
 
         else:
             app.logger.info(request.method)
 
-        return render_template('calendar.html', operationList = operations)
+        return render_template('calendar.html', operationList = operations, operationDiscountList = operationsDiscount)
     else:
         return redirect('/')
 
@@ -229,23 +236,20 @@ def medicViewHandler():
 
     medic_id = dbGetMedicId(g.user)
     if medic_id == 0:
-        app.logger.error("Failed to get medic id!")  
-    else:  
-        result = dbSelectAppointments(medic_id)
+        app.logger.error("Failed to get medic id!")
+        return redirect('/login')  
+    result = dbSelectAppointments(medic_id)
 
-        if result == None:
-           app.logger.info("No appointments found.") 
-           return render_template('medic_calendar.html', doctor=doctor) 
+    if result == None:
+       app.logger.info("No appointments found.") 
+       return render_template('medic_calendar.html', doctor=doctor) 
 
-        resList = []
-        for res in result:
-            print(res)
-            resList.append(AppointmentDetails(res[0], res[1], res[2], res[3], res[4], res[5]))
+    resList = []
+    for res in result:
+        print(res)
+        resList.append(AppointmentDetails(res[0], res[1], res[2], res[3], res[4], res[5]))
 
-        return render_template('medic_calendar.html', doctor=doctor, list=resList) 
-
-    return render_template('medic_calendar.html', doctor=doctor)
-
+    return render_template('medic_calendar.html', doctor=doctor, list=resList)
 
 @app.route('/records', methods=["GET", "POST"])
 def recordsHandler():
@@ -257,14 +261,15 @@ def recordsHandler():
         req = request.form
             # Logout
         if 'logoutBtn' in req:
-            app.logger.info("Logout user: " +g.user)
+            app.logger.info("Logout user: " + g.user)
             session.pop('user', None)
             return redirect('/')
     
     client_id = session.get('client_id', None)  
     result = dbGetClientRecords(client_id)
     if result == None:
-       app.logger.info("No medical records found.") 
+       app.logger.info("No medical records found.")
+       return redirect('/medic')
 
     resList = []
     for res in result:

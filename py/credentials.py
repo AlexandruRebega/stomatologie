@@ -89,7 +89,7 @@ def crParseDate(dateTime):
         return None
 
     # date is valid! 
-    date = arr[0]+arr[1]+arr[2]
+    date = arr[0] + arr[1] + arr[2]
     
     arr = time.split(':')
     if len(arr) != 2:

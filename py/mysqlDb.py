@@ -9,8 +9,8 @@ mydb = mysql.connector.connect(
   host="localhost",
   user="root",
   passwd="root",
-  # port="3306",
-  port="32000",
+  port="3306",
+  # port="32000",
   database="dent"
 )
 
@@ -38,6 +38,7 @@ def dbGetClientPass(email):
         print(e)
 
     finally:
+        mydb.commit()
         cursor.close()
 
     return ''       
@@ -64,6 +65,7 @@ def dbInsertNewClient(name, email, passwd, phone):
         return False
 
     finally:
+        mydb.commit()
         cursor.close()
 
     if __db_debug__ :
@@ -93,6 +95,7 @@ def dbGetClientId(email):
         print(e)
 
     finally:
+        mydb.commit()
         cursor.close()
 
     return 0 
@@ -118,6 +121,7 @@ def dbGetMedicId(email):
         print(e)
 
     finally:
+        mydb.commit()
         cursor.close()
 
     return 0
@@ -144,6 +148,7 @@ def dbGetMedicPass(email):
         print(e)
 
     finally:
+        mydb.commit()
         cursor.close()
 
     return ''
@@ -171,6 +176,7 @@ def dbInsertNewAppointment(medic_id, client_id, date, sTime, eTime, operation):
         return False
 
     finally:
+        mydb.commit()
         cursor.close()
 
     if __db_debug__ :
@@ -224,6 +230,7 @@ def dbSelectAppointments(medic_id):
         print(e)
 
     finally:
+        mydb.commit()
         cursor.close()
 
     return None 
@@ -248,9 +255,34 @@ def dbGetAllOperations():
         print(e)
 
     finally:
+        mydb.commit()
         cursor.close()
 
-    return None 
+    return None
+
+def dbGetAllDiscountOperations(client_email):
+    try:
+        cursor = mydb.cursor()
+
+        if __db_debug__ :
+            print("Get discount operations...")  
+
+        cursor.callproc('getAllDiscountOperations', [client_email])
+
+        for result in cursor.stored_results():
+            res = result.fetchall()
+            if not res:
+                return None
+            return res
+
+    except Error as e:
+        print(e)
+
+    finally:
+        mydb.commit()
+        cursor.close()
+
+    return None
 
 
 def dbInsertNewIstoricRecord(operatie_id, client_id, date):
@@ -270,6 +302,7 @@ def dbInsertNewIstoricRecord(operatie_id, client_id, date):
         return False
 
     finally:
+        mydb.commit()
         cursor.close()
 
     if __db_debug__ :
@@ -299,6 +332,7 @@ def dbGetClientRecords(client_id):
         print(e)
 
     finally:
+        mydb.commit()
         cursor.close()
 
     return None 
