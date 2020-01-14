@@ -21,6 +21,7 @@ from mysqlDb import dbSelectAppointments
 from mysqlDb import dbGetAllOperations
 from mysqlDb import dbGetAllDiscountOperations
 from mysqlDb import dbGetClientRecords
+from mysqlDb import dbGetMedicBonus
 from credentials import crCheckPhone
 from credentials import crCheckPassLen
 from credentials import crCheckNameLen
@@ -238,18 +239,28 @@ def medicViewHandler():
     if medic_id == 0:
         app.logger.error("Failed to get medic id!")
         return redirect('/login')  
+
+    bonus = dbGetMedicBonus(medic_id)
+    if bonus != None:
+        salariu = bonus[0][1]
+        bonus = bonus[0][2]
+    else:
+        salariu = 0
+        bonus = 0
+
+
     result = dbSelectAppointments(medic_id)
 
     if result == None:
        app.logger.info("No appointments found.") 
-       return render_template('medic_calendar.html', doctor=doctor) 
+       return render_template('medic_calendar.html', doctor=doctor, pay=salariu, bonus=bonus) 
 
     resList = []
     for res in result:
         print(res)
         resList.append(AppointmentDetails(res[0], res[1], res[2], res[3], res[4], res[5]))
 
-    return render_template('medic_calendar.html', doctor=doctor, list=resList)
+    return render_template('medic_calendar.html', doctor=doctor, list=resList, pay=salariu, bonus=bonus)
 
 @app.route('/records', methods=["GET", "POST"])
 def recordsHandler():

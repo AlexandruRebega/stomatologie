@@ -9,8 +9,8 @@ mydb = mysql.connector.connect(
   host="localhost",
   user="root",
   passwd="root",
-  port="3306",
-  # port="32000",
+  # port="3306",
+  port="32000",
   database="dent"
 )
 
@@ -285,7 +285,7 @@ def dbGetAllDiscountOperations(client_email):
     return None
 
 
-def dbInsertNewIstoricRecord(operatie_id, client_id, date):
+def dbInsertNewIstoricRecord(operatie_id, client_id, medic_id, date):
     try:
         cursor = mydb.cursor()
 
@@ -321,6 +321,34 @@ def dbGetClientRecords(client_id):
 
         args = [client_id]
         cursor.callproc('getClientRecords', args)
+
+        for result in cursor.stored_results():
+            res = result.fetchall()
+            if not res:
+                return None
+            return res
+
+    except Error as e:
+        print(e)
+
+    finally:
+        mydb.commit()
+        cursor.close()
+
+    return None 
+
+
+# (0.1 * m.medic_salariu ) + (@nr_programari * 20) 
+# WHERE nr_programari = no. operatii where pret > 200 in the last mounth
+def dbGetMedicBonus(medic_id):
+    try:
+        cursor = mydb.cursor()
+
+        if __db_debug__ :
+            print("Get medic bonus")  
+
+        args = [medic_id]
+        cursor.callproc('getMedicBonus', args)
 
         for result in cursor.stored_results():
             res = result.fetchall()

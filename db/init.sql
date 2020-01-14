@@ -36,9 +36,13 @@ create table istoric(
     istoric_id      INT NOT NULL AUTO_INCREMENT,
     operatie_id     INT NOT NULL,
     client_id       INT NOT NULL,
-    istoric_data    DATE,
+    medic_id        INT NOT NULL,    
+    istoric_data    DATE NOT NULL,
+
     FOREIGN KEY (operatie_id)
         REFERENCES operatie(operatie_id),
+    FOREIGN KEY (medic_id)
+        REFERENCES medici(medic_id),        
     FOREIGN KEY (client_id)
         REFERENCES clienti(client_id)
         ON DELETE CASCADE,  
@@ -287,9 +291,10 @@ DELIMITER //
 CREATE PROCEDURE insertNewIstoricRecord(
     operatie_id     INT,
     client_id       INT,
+    medic_id        INT,
     istoric_data    DATE)
 BEGIN 
-    INSERT INTO istoric VALUES (NULL, operatie_id, client_id, istoric_data);
+    INSERT INTO istoric VALUES (NULL, operatie_id, client_id, medic_id, istoric_data);
 END; //
 DELIMITER ;
 
@@ -326,8 +331,9 @@ CREATE EVENT removeOldAppointmetsEvent
 ON COMPLETION PRESERVE
     DO
       BEGIN
-            INSERT INTO istoric (operatie_id, client_id, data)
-                SELECT operatie_id, client_id, data FROM programari AS p
+            INSERT INTO istoric (operatie_id, client_id, medic_id, data)
+                SELECT operatie_id, client_id, medic_id, data 
+                FROM programari AS p
                 WHERE p.data <= DATE(NOW());
             DELETE FROM programari p WHERE p.data <= DATE(NOW());
       END //
@@ -339,11 +345,29 @@ DELIMITER ;
 DELIMITER // 
 CREATE PROCEDURE testRemoveEvent()
     BEGIN 
-        INSERT INTO istoric (operatie_id, client_id, istoric_data)
-            SELECT operatie_id, client_id, data 
+        INSERT INTO istoric (operatie_id, client_id, medic_id, istoric_data)
+            SELECT operatie_id, client_id, medic_id, data 
             FROM programari AS p
             WHERE p.data <= DATE(NOW());
         DELETE FROM programari p WHERE p.data <= DATE(NOW());
     END; //
+DELIMITER ;
+
+
+DELIMITER // 
+CREATE PROCEDURE getMedicBonus(medic_id INT)
+BEGIN 
+
+SET @nr_programari = (SELECT COUNT(*)
+                      FROM istoric AS i, operatie AS o
+                      WHERE i.istoric_data > DATE_SUB(now(), INTERVAL 1 MONTH) AND
+                      o.operatie_pret > 200 AND
+                      i.operatie_id = o.operatie_id AND
+                      i.medic_id = medic_id);
+SELECT m.medic_nume, m.medic_salariu, ((0.1 * m.medic_salariu ) + (@nr_programari * 20)) AS medic_bonus
+FROM medici AS m
+WHERE m.medic_id = medic_id;
+
+END; //
 DELIMITER ;
 
