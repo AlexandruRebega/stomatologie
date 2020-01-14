@@ -98,8 +98,9 @@ def appointmentHandler():
             operations.append(Operation(oper[0],oper[1], oper[2], oper[3]))
 
         operationsDiscount = []
-        for oper in opDiscountList:
-            operationsDiscount.append(DiscountOperation(oper[0],oper[1], oper[2], oper[3], oper[4]))
+        if opDiscountList != None:
+            for oper in opDiscountList:
+                operationsDiscount.append(DiscountOperation(oper[0],oper[1], oper[2], oper[3], oper[4]))
 
         if request.method == "POST":
             app.logger.info(request.method)

@@ -5,12 +5,10 @@ import logging
 from credentials import crParseDate
 
 mydb = mysql.connector.connect(
-  # host="db",
   host="localhost",
   user="root",
   passwd="root",
-  # port="3306",
-  port="32000",
+  port="3306",
   database="dent"
 )
 
