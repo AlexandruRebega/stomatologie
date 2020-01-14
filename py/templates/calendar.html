@@ -6,11 +6,11 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" type="text/css" href="static/datetimepicker/jquery.datetimepicker.css"/>
 
-        <link rel="stylesheet" type="text/css" href="static/css/table100.css">
         <link rel="stylesheet" href="static/css/bootstrap.min.css"> 
         <link rel="stylesheet" href="static/fonts/icomoon/style.css">
         <link rel="stylesheet" href="static/css/styleIndex.css">
         <link rel="stylesheet" href="static/css/icon.css">
+
     </head>
 
     <body>
@@ -148,83 +148,11 @@
                     </fieldset>
                 </form>
             </div>
+
             </div>
           </div>
         </div>
-      </div>
-    </div>
 
-    <div class="limiter">
-        <div class="container-table100">
-          <div class="wrap-table100">
-            <div class="table100 ver1 m-b-110">
-              <div class="table100-head">
-                <table>
-                  <thead>
-                    <tr class="row100 head">
-                      <th class="cell100 column1">Operation</th>
-                      <th class="cell100 column2">Price</th>
-                    </tr>
-                  </thead>
-                </table>
-              </div>
-
-              <div class="table100-body js-pscroll">
-                <table>
-                  <tbody>
-
-                    {% for operation in operationList %}
-                    <tr class="row100 body">
-                      <td class="cell100 column1">{{operation.name}}</td>
-                      <td class="cell100 column2">{{operation.price}}</td>
-                    </tr>
-                    {% endfor %}
-
-                  </tbody>
-                </table>
-              </div>   
-          </div>
-        </div>
-      </div>
-    </div>
-
-
-    <div class="limiter">
-        <div class="block-heading-1">
-            <h2>Your Current Discounts</h2>
-        </div>
-        <div class="container-table100">
-          <div class="wrap-table100">
-            <div class="table100 ver1 m-b-110">
-              <div class="table100-head">
-                <table>
-                  <thead>
-                    <tr class="row100 head">
-                      <th class="cell100 column1">Operation</th>
-                      <th class="cell100 column2">Price</th>
-                      <th class="cell100 column2">Your Discount Price</th>
-                    </tr>
-                  </thead>
-                </table>
-              </div>
-
-              <div class="table100-body js-pscroll">
-                <table>
-                  <tbody>
-
-                    {% for operation in operationDiscountList %}
-                    <tr class="row100 body">
-                      <td class="cell100 column1">{{operation.name}}</td>
-                      <td class="cell100 column2">{{operation.price}}</td>
-                      <td class="cell100 column2">{{operation.discountPrice}}</td>
-                    </tr>
-                    {% endfor %}
-
-                  </tbody>
-                </table>
-              </div>   
-          </div>
-        </div>
       </div>
     </div>
 
@@ -251,7 +179,7 @@
                                   '04.01.2014','05.01.2014','06.01.2014'],
                         allowTimes:[
                           '09:00', '10:00', '11:00', '12:00', '13:00', '14:00', 
-                          '15:00', '16:00'
+                          '15:00', '16:00', '17:00'
                          ],
                         dayOfWeek:[
                             "Mo", "Di", "Mi", 
