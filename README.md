@@ -15,7 +15,10 @@
   - Procedure *testRemovedEvent* can be called manually to test the event above
   - DB *variables*:
     - _log_bin_trust_function_creators - avoid errors in slotIsAvailable (https://dev.mysql.com/doc/refman/8.0/en/stored-programs-logging.html)
-    - event_scheduler : 
+    - event_scheduler - starts event thread in mySql daemon (mysql> show processlist;)
+  - additional procedures: getAllDiscountOperations, getMedicBonus
+ 
+* docker-compose.yml contains 2 services: *db* and *py*
 
 
 * RUN:
