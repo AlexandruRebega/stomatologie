@@ -1,12 +1,15 @@
-RULARE:
+-- DB Project - Web app for Dental Clinic Management
+-- BE: Python
+
+RUN:
 docker-compose build --no-cache
 docker-compose up
 docker run mysql -P 3306
 
-STERGERE IMAGINI:
+DELETE DOCKER IMAGE:
 docker-compose down
 docker system prune -a
 
-CONECTARE MYSQL:
+CONNECT TO MYSQL DB:
 docker run  -d --env="MYSQL_ROOT_PASSWORD=root" -p 32000:3306 mysql
 mysql -P 32000 -u root -p dent
