@@ -33,3 +33,7 @@ docker system prune -a
 * CONNECT TO MYSQL DB:
 docker run  -d --env="MYSQL_ROOT_PASSWORD=root" -p 32000:3306 mysql
 mysql -P 32000 -u root -p dent
+
+# Pages
+* Landing page:
+![screenshot](screenshots/index.PNG)
